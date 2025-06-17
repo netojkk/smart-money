@@ -2,7 +2,7 @@ package com.neto.smart_money.domain.entities.lauch;
 
 import com.neto.smart_money.domain.entities.account.Account;
 import com.neto.smart_money.domain.entities.category.Category;
-import com.neto.smart_money.domain.entities.user.User;
+import com.neto.smart_money.domain.entities.client.Client;
 import com.neto.smart_money.domain.enums.CategoryType;
 import com.neto.smart_money.domain.enums.LaunchStatus;
 import jakarta.persistence.*;
@@ -20,7 +20,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor@AllArgsConstructor
-public class Launch {
+public class  Launch {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +29,7 @@ public class Launch {
     private String description;
 
     @Column(precision = 15, scale = 2)
-    private BigDecimal value;
+    private BigDecimal amount;
 
     private LocalDate date;
 
@@ -45,8 +45,8 @@ public class Launch {
     private Account account;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "client_id")
+    private Client client;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
