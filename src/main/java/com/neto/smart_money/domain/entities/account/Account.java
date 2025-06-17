@@ -1,6 +1,6 @@
 package com.neto.smart_money.domain.entities.account;
 
-import com.neto.smart_money.domain.entities.user.User;
+import com.neto.smart_money.domain.entities.client.Client;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,7 +28,7 @@ public class Account {
     private BigDecimal balance;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "client_id")
+    private Client client;
 
 }
