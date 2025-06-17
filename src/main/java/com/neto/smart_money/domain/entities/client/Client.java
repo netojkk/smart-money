@@ -1,4 +1,4 @@
-package com.neto.smart_money.domain.entities.user;
+package com.neto.smart_money.domain.entities.client;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,12 +9,12 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Entity
-@Table(name = "user")
+@Table(name = "client")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
