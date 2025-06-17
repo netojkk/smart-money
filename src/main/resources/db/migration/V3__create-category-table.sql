@@ -1,0 +1,5 @@
+CREATE TABLE category(
+    id UUID PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    type VARCHAR(20) NOT NULL
+);
