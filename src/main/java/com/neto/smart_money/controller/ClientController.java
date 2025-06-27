@@ -47,7 +47,7 @@ public class ClientController {
         return ResponseEntity.ok(clientService.editClientById(id,body));
     }
 
-    @DeleteMapping("/id")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable UUID id){
         clientService.deleteClient(id);
         //Because there's nothing to return.
