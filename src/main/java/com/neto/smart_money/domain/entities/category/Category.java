@@ -1,5 +1,6 @@
 package com.neto.smart_money.domain.entities.category;
 
+import com.neto.smart_money.domain.entities.client.Client;
 import com.neto.smart_money.domain.enums.CategoryType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,11 +19,15 @@ import java.util.UUID;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private UUID id;
 
     private String name;
 
     @Enumerated(EnumType.STRING)
     private CategoryType type;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
 }
