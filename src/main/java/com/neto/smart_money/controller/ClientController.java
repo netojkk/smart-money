@@ -6,6 +6,7 @@ import com.neto.smart_money.dto.LoginRequestDTO;
 import com.neto.smart_money.dto.RegisterRequestDTO;
 import com.neto.smart_money.dto.UpdateClientDTO;
 import com.neto.smart_money.services.ClientService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/clients")
+@AllArgsConstructor
 public class ClientController {
 
-    @Autowired
+
     private ClientService clientService;
 
     @PostMapping("/register")
