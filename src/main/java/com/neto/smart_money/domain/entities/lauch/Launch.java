@@ -20,7 +20,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor@AllArgsConstructor
-public class  Launch {
+public class   Launch {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
