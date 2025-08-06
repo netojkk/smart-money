@@ -6,23 +6,28 @@ import com.neto.smart_money.domain.enums.CategoryType;
 import com.neto.smart_money.dto.CategoryRequestDTO;
 import com.neto.smart_money.dto.CategoryResponseDTO;
 import com.neto.smart_money.dto.UpdateCategoryDTO;
-import com.neto.smart_money.exceptions.CategoryDuplicateException;
-import com.neto.smart_money.exceptions.CategoryNotFoundException;
-import com.neto.smart_money.exceptions.UserNotFoundException;
+import com.neto.smart_money.exceptions.custom.CategoryDuplicateException;
+import com.neto.smart_money.exceptions.custom.CategoryNotFoundException;
+import com.neto.smart_money.exceptions.custom.InvalidCategoryTypeException;
+import com.neto.smart_money.exceptions.custom.UserNotFoundException;
 import com.neto.smart_money.repositories.CategoryRepository;
 import com.neto.smart_money.repositories.ClientRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class CategoryService {
 
+    @Autowired
     private ClientRepository clientRepository;
+    @Autowired
     private CategoryRepository categoryRepository;
 
     public CategoryResponseDTO createCategory(CategoryRequestDTO data){
@@ -37,7 +42,12 @@ public class CategoryService {
         category.setName(data.name());
 
         //received in string and transform in ENUM
-        CategoryType typeEnum = CategoryType.valueOf(data.type().toUpperCase());
+        CategoryType typeEnum;
+        try {
+            typeEnum = CategoryType.valueOf(data.type().toUpperCase());
+        } catch (IllegalArgumentException e){
+            throw new InvalidCategoryTypeException("Invalid category type: " + data.type());
+        }
         category.setType(typeEnum);
 
         category.setClient(client);
@@ -56,8 +66,21 @@ public class CategoryService {
         Category category = this.categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("Category Not Found"));
 
-        category.setName(data.name() != null ? data.name() : category.getName());
-        category.setType(data.type() != null ? data.type() : category.getType());
+        if (data.name() != null && !data.name().equalsIgnoreCase(category.getName())){
+            Optional<Category> existingCategory = this.categoryRepository.findByNameAndClientId(data.name(), category.getClient().getId());
+
+            if (existingCategory.isPresent()){
+                throw  new CategoryDuplicateException("This category name already exists");
+            }
+        }
+
+        if (data.name() != null) {
+            category.setName(data.name());
+        }
+
+        if (data.type() != null) {
+            category.setType(data.type());
+        }
 
         Category updated = categoryRepository.save(category);
         return new CategoryResponseDTO(updated.getId(), updated.getName(), updated.getType());
@@ -68,6 +91,6 @@ public class CategoryService {
         Category category = this.categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("Category Not Found"));
 
-        categoryRepository.deleteById(id);
+        categoryRepository.delete(category);
     }
 }
