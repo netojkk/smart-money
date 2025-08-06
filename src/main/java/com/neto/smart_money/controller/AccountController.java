@@ -38,4 +38,11 @@ public class AccountController {
     public ResponseEntity<AccountResponseDTO> wihtdraw(@PathVariable UUID accountId, @RequestBody TransactionDTO body){
         return ResponseEntity.ok(accountService.withdraw(accountId, body.balance()));
     }
+
+    @DeleteMapping("/{clientId}/{accountId}")
+    public ResponseEntity<Void> deleteById(@PathVariable UUID clientId, @PathVariable UUID accountId){
+        accountService.deleteById(clientId,accountId);
+
+        return ResponseEntity.noContent().build();
+    }
 }

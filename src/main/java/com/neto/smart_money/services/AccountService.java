@@ -4,11 +4,13 @@ import com.neto.smart_money.domain.entities.account.Account;
 import com.neto.smart_money.domain.entities.client.Client;
 import com.neto.smart_money.dto.AccountRequestDTO;
 import com.neto.smart_money.dto.AccountResponseDTO;
-import com.neto.smart_money.exceptions.AccountNotFoundException;
-import com.neto.smart_money.exceptions.InvalidTransactionAmountException;
-import com.neto.smart_money.exceptions.UserNotFoundException;
+import com.neto.smart_money.exceptions.custom.AccountNotFoundException;
+import com.neto.smart_money.exceptions.custom.DifferentUserException;
+import com.neto.smart_money.exceptions.custom.InvalidTransactionAmountException;
+import com.neto.smart_money.exceptions.custom.UserNotFoundException;
 import com.neto.smart_money.repositories.AccountRepository;
 import com.neto.smart_money.repositories.ClientRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -68,5 +70,15 @@ public class AccountService {
         account.setBalance(account.getBalance().subtract(amount));
         Account updated = accountRepository.save(account);
         return new AccountResponseDTO(updated.getId(), updated.getName(), updated.getBalance());
+    }
+    @Transactional
+    public void deleteById(UUID clientId,UUID accountId){
+        Account account = this.accountRepository.findById(accountId).orElseThrow( () -> new AccountNotFoundException("Account Not Found"));
+
+        if(!account.getClient().getId().equals(clientId)){
+            throw new DifferentUserException("That account doesn't exists");
+        }
+
+        accountRepository.deleteById(account.getId());
     }
 }
