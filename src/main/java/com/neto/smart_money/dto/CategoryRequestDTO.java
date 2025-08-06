@@ -1,8 +1,13 @@
 package com.neto.smart_money.dto;
 
-import com.neto.smart_money.domain.enums.CategoryType;
-
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
-public record CategoryRequestDTO(String name, String type, UUID clientId) {
+@Valid
+public record CategoryRequestDTO(
+        @NotBlank String name,
+        @NotBlank String type,
+        @NotNull UUID clientId) {
 }

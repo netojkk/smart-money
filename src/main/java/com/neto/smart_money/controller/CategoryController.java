@@ -4,6 +4,7 @@ import com.neto.smart_money.dto.CategoryRequestDTO;
 import com.neto.smart_money.dto.CategoryResponseDTO;
 import com.neto.smart_money.dto.UpdateCategoryDTO;
 import com.neto.smart_money.services.CategoryService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,17 +21,17 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping("/create")
-    public ResponseEntity<CategoryResponseDTO> createCategory(@RequestBody CategoryRequestDTO body){
+    public ResponseEntity<CategoryResponseDTO> createCategory(@RequestBody @Valid CategoryRequestDTO body){
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.createCategory(body));
     }
 
     @GetMapping("/{clientId}")
-    public ResponseEntity<List<CategoryResponseDTO>> getAllByClient(@PathVariable UUID clientId){
+    public ResponseEntity<List<CategoryResponseDTO>> getAllByClient(@PathVariable @Valid UUID clientId){
         return ResponseEntity.ok(categoryService.getAllByClient(clientId));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryResponseDTO> editCategoryById(@PathVariable UUID id, @RequestBody UpdateCategoryDTO body){
+    public ResponseEntity<CategoryResponseDTO> editCategoryById(@PathVariable UUID id, @RequestBody @Valid UpdateCategoryDTO body){
         return ResponseEntity.ok(categoryService.editCategoryById(id, body));
     }
 
