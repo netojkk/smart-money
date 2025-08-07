@@ -23,16 +23,6 @@ public class ClientController {
 
     private ClientService clientService;
 
-    @PostMapping("/register")
-    public ResponseEntity<ClientResponseDTO> create(@RequestBody RegisterRequestDTO body) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.clientService.createClient(body));
-
-    }
-    @PostMapping("/login")
-    public ResponseEntity<ClientResponseDTO> login(@RequestBody LoginRequestDTO body){
-        return ResponseEntity.ok(this.clientService.loginClient(body));
-    }
-
     @GetMapping
     public ResponseEntity<List<ClientResponseDTO>> getAll(){
         List<ClientResponseDTO> clients = clientService.getAllClients();
