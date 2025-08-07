@@ -1,7 +1,11 @@
 package com.neto.smart_money.dto;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+
+@Valid
 public record LoginRequestDTO (
-        String email,
-        String password
+        @NotBlank String email,
+        @NotBlank String password
         ){
 }
