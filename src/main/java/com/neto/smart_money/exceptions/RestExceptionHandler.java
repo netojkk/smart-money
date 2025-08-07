@@ -1,6 +1,6 @@
-package com.neto.smart_money.infra;
+package com.neto.smart_money.exceptions;
 
-import com.neto.smart_money.exceptions.*;
+import com.neto.smart_money.exceptions.custom.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -48,6 +48,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CategoryNotFoundException.class)
     private ResponseEntity<ApiErrorMessage> categoryNotFoundHandler(CategoryNotFoundException e){
+        ApiErrorMessage threatResponse = new ApiErrorMessage(HttpStatus.NOT_FOUND, e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
+    }
+    @ExceptionHandler(DifferentUserException.class)
+    private ResponseEntity<ApiErrorMessage> differentuserHandler(DifferentUserException e){
         ApiErrorMessage threatResponse = new ApiErrorMessage(HttpStatus.NOT_FOUND, e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
     }
