@@ -2,12 +2,8 @@ package com.neto.smart_money.services;
 
 import com.neto.smart_money.domain.entities.client.Client;
 import com.neto.smart_money.dto.ClientResponseDTO;
-import com.neto.smart_money.dto.LoginRequestDTO;
-import com.neto.smart_money.dto.RegisterRequestDTO;
 import com.neto.smart_money.dto.UpdateClientDTO;
-import com.neto.smart_money.exceptions.EmailDuplicateException;
-import com.neto.smart_money.exceptions.UserNotFoundException;
-import com.neto.smart_money.exceptions.WrongPasswordException;
+import com.neto.smart_money.exceptions.custom.UserNotFoundException;
 import com.neto.smart_money.repositories.ClientRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,25 +17,6 @@ public class ClientService {
 
     @Autowired
     private ClientRepository repository;
-
-
-    public ClientResponseDTO createClient(RegisterRequestDTO data){
-        if(this.repository.findByEmail(data.email()).isPresent()) {
-            throw new EmailDuplicateException("Email já cadastrado");
-        }
-        Client client = new Client(data);
-        repository.save(client);
-        return new ClientResponseDTO(client.getId(), client.getName(), client.getEmail());
-
-    }
-
-    public ClientResponseDTO loginClient(LoginRequestDTO data){
-        Client client = this.repository.findByEmail(data.email()).orElseThrow(() -> new UserNotFoundException("User Not Found"));
-        if (!data.password().equals(client.getPassword())){
-            throw new WrongPasswordException("Incorrect Password");
-        }
-        return new ClientResponseDTO(client.getId(), client.getName(), client.getEmail());
-    }
 
     public List<ClientResponseDTO> getAllClients() {
         return repository.findAll()
@@ -71,6 +48,6 @@ public class ClientService {
     @Transactional
     public void deleteClient(UUID id){
         Client client = this.repository.findById(id).orElseThrow(() -> new UserNotFoundException("User Not found!"));
-        repository.deleteById(id);
+        repository.deleteById(client.getId());
     }
 }
