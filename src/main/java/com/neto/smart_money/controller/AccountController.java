@@ -24,9 +24,9 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.CREATED).body(accountService.createAccount(body));
     }
 
-    @GetMapping("/{clientId}")
-    public ResponseEntity<List<AccountResponseDTO>> getByClient(@PathVariable UUID clientId){
-        return ResponseEntity.ok(accountService.getAllByClient(clientId));
+    @GetMapping("/all")
+    public ResponseEntity<List<AccountResponseDTO>> getByClient(){
+        return ResponseEntity.ok(accountService.getAllByClient());
     }
 
     @PostMapping("/{accountId}/deposit")
@@ -39,9 +39,9 @@ public class AccountController {
         return ResponseEntity.ok(accountService.withdraw(accountId, body.balance()));
     }
 
-    @DeleteMapping("/{clientId}/{accountId}")
-    public ResponseEntity<Void> deleteById(@PathVariable UUID clientId, @PathVariable UUID accountId){
-        accountService.deleteById(clientId,accountId);
+    @DeleteMapping("/{accountId}")
+    public ResponseEntity<Void> deleteById( @PathVariable UUID accountId){
+        accountService.deleteById(accountId);
 
         return ResponseEntity.noContent().build();
     }
