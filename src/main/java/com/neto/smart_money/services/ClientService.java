@@ -7,6 +7,7 @@ import com.neto.smart_money.exceptions.custom.UserNotFoundException;
 import com.neto.smart_money.repositories.ClientRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,10 @@ public class ClientService {
     @Autowired
     private ClientRepository repository;
 
+    public Client getAuthenticated(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return repository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User Not Found"));
+    }
     public List<ClientResponseDTO> getAllClients() {
         return repository.findAll()
                 .stream()
@@ -34,8 +39,9 @@ public class ClientService {
 
     }
 
-    public ClientResponseDTO editClientById(UUID id, UpdateClientDTO data){
-        Client client = this.repository.findById(id).orElseThrow(() -> new UserNotFoundException("User Not found!"));
+    @Transactional
+    public ClientResponseDTO editClientById(UpdateClientDTO data){
+        Client client = getAuthenticated();
 
         client.setName(data.name() != null ? data.name() : client.getName());
         client.setEmail(data.email() != null ? data.email() : client.getEmail());
@@ -46,8 +52,8 @@ public class ClientService {
     }
 
     @Transactional
-    public void deleteClient(UUID id){
-        Client client = this.repository.findById(id).orElseThrow(() -> new UserNotFoundException("User Not found!"));
+    public void deleteClient(){
+        Client client = getAuthenticated();
         repository.deleteById(client.getId());
     }
 }
