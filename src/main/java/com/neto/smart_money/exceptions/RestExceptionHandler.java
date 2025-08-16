@@ -51,9 +51,30 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         ApiErrorMessage threatResponse = new ApiErrorMessage(HttpStatus.NOT_FOUND, e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
     }
-    @ExceptionHandler(DifferentUserException.class)
-    private ResponseEntity<ApiErrorMessage> differentuserHandler(DifferentUserException e){
+    @ExceptionHandler(LaunchNotFoundException.class)
+    private ResponseEntity<ApiErrorMessage> launchNotFoundHandler(LaunchNotFoundException e){
         ApiErrorMessage threatResponse = new ApiErrorMessage(HttpStatus.NOT_FOUND, e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
+    }
+    @ExceptionHandler(DifferentUserException.class)
+    private ResponseEntity<ApiErrorMessage> differentUserHandler(DifferentUserException e){
+        ApiErrorMessage threatResponse = new ApiErrorMessage(HttpStatus.NOT_FOUND, e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
+    }
+    @ExceptionHandler(UserNotAuthenticatedException.class)
+    private ResponseEntity<ApiErrorMessage> UserNotAuthenticatedHandler(UserNotAuthenticatedException e){
+        ApiErrorMessage threatResponse = new ApiErrorMessage(HttpStatus.NOT_FOUND, e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
+    }
+
+    @ExceptionHandler(AccountAlreadyExistsException.class)
+    private ResponseEntity<ApiErrorMessage> AccountAlreadyExistsHandler(AccountAlreadyExistsException e){
+        ApiErrorMessage threatResponse = new ApiErrorMessage(HttpStatus.CONFLICT, e.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(threatResponse);
+    }
+    @ExceptionHandler(LaunchAlreadyExistsException.class)
+    private ResponseEntity<ApiErrorMessage> LaunchAlreadyExistsHandler(LaunchAlreadyExistsException e){
+        ApiErrorMessage threatResponse = new ApiErrorMessage(HttpStatus.CONFLICT, e.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(threatResponse);
     }
 }
