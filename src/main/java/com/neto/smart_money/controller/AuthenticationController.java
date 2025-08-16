@@ -1,10 +1,11 @@
 package com.neto.smart_money.controller;
 
 import com.neto.smart_money.domain.entities.client.Client;
-import com.neto.smart_money.dto.ClientResponseDTO;
 import com.neto.smart_money.dto.LoginRequestDTO;
+import com.neto.smart_money.dto.LoginResponseDTO;
 import com.neto.smart_money.dto.RegisterRequestDTO;
 import com.neto.smart_money.exceptions.custom.EmailDuplicateException;
+import com.neto.smart_money.infra.security.TokenService;
 import com.neto.smart_money.repositories.ClientRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +32,17 @@ public class AuthenticationController {
     @Autowired
     private PasswordEncoder encoder;
 
-    @PostMapping("/login")
-    public ResponseEntity<ClientResponseDTO> login(@RequestBody @Valid LoginRequestDTO data){
+    @Autowired
+    private TokenService tokenService;
 
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginRequestDTO data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = this.manager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((Client) auth.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")
