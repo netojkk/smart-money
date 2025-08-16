@@ -10,5 +10,6 @@ import java.util.UUID;
 public interface CategoryRepository extends JpaRepository<Category, UUID> {
     List<Category> findByClientId(UUID clientId);
     Optional<Category> findByNameAndClientId(String name, UUID clientId);
+    Optional<Category> findByIdAndClientId(UUID categoryId, UUID clientId);
 
 }
