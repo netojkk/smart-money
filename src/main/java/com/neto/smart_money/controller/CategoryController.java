@@ -25,9 +25,9 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.createCategory(body));
     }
 
-    @GetMapping("/{clientId}")
-    public ResponseEntity<List<CategoryResponseDTO>> getAllByClient(@PathVariable @Valid UUID clientId){
-        return ResponseEntity.ok(categoryService.getAllByClient(clientId));
+    @GetMapping
+    public ResponseEntity<List<CategoryResponseDTO>> getAllByClient(){
+        return ResponseEntity.ok(categoryService.getAllByClient());
     }
 
     @PutMapping("/{id}")
