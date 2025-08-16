@@ -8,6 +8,5 @@ import java.util.UUID;
 @Valid
 public record CategoryRequestDTO(
         @NotBlank String name,
-        @NotBlank String type,
-        @NotNull UUID clientId) {
+        @NotBlank String type) {
 }
