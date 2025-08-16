@@ -10,13 +10,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Valid
-public record LaunchRequestDTO(
-        @NotBlank String description,
-        @NotNull BigDecimal amount,
-        @NotNull LocalDate transactiondate,
-        @NotNull CategoryType type,
-        @NotNull SetStatus status,
-        @NotNull UUID account,
-        @NotNull UUID category) {
+public record UpdateLaunchDTO(
+        String description,
+        BigDecimal amount,
+        LocalDate transactiondate,
+        CategoryType type,
+        SetStatus status,
+        UUID account,
+        UUID category) {
 }
