@@ -1,6 +1,6 @@
 package com.neto.smart_money.domain.enums;
 
-public enum LaunchStatus {
+public enum SetStatus {
     PENDING,
     FINISHED,
     CANCELED
