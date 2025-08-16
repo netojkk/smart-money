@@ -4,7 +4,7 @@ import com.neto.smart_money.domain.entities.account.Account;
 import com.neto.smart_money.domain.entities.category.Category;
 import com.neto.smart_money.domain.entities.client.Client;
 import com.neto.smart_money.domain.enums.CategoryType;
-import com.neto.smart_money.domain.enums.LaunchStatus;
+import com.neto.smart_money.domain.enums.SetStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +23,7 @@ import java.util.UUID;
 public class   Launch {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private UUID id;
 
     private String description;
@@ -31,12 +31,13 @@ public class   Launch {
     @Column(precision = 15, scale = 2)
     private BigDecimal amount;
 
+    @Column(name = "transaction_date")
     private LocalDate date;
 
     @Enumerated(EnumType.STRING)
     private CategoryType type;
     @Enumerated(EnumType.STRING)
-    private LaunchStatus launch;
+    private SetStatus status;
 
 
     //Relations
@@ -51,6 +52,5 @@ public class   Launch {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-
 
 }
