@@ -15,6 +15,7 @@ import com.neto.smart_money.repositories.ClientRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,11 +31,16 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public CategoryResponseDTO createCategory(CategoryRequestDTO data){
-        Client client = this.clientRepository.findById(data.clientId())
-                .orElseThrow(() -> new UserNotFoundException("User Not Found!"));
+    public Client getAuthenticated(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return clientRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User Not Found"));
+    }
 
-        if (this.categoryRepository.findByNameAndClientId(data.name(), data.clientId()).isPresent()){
+    public CategoryResponseDTO createCategory(CategoryRequestDTO data){
+        Client client = getAuthenticated();
+
+        if (this.categoryRepository.findByNameAndClientId(data.name(), client.getId()).isPresent()){
             throw new CategoryDuplicateException("This category already exists");
         }
 
@@ -56,13 +62,16 @@ public class CategoryService {
         return new CategoryResponseDTO(created.getId(), created.getName(), created.getType());
     }
 
-    public List<CategoryResponseDTO> getAllByClient(UUID clientID){
-        return categoryRepository.findByClientId(clientID).stream()
+    public List<CategoryResponseDTO> getAllByClient(){
+        Client client = getAuthenticated();
+        return categoryRepository.findByClientId(client.getId()).stream()
                 .map( category -> new CategoryResponseDTO(category.getId(), category.getName(), category.getType()))
                 .toList();
     }
 
     public CategoryResponseDTO editCategoryById(UUID id, UpdateCategoryDTO data){
+        Client client = getAuthenticated();
+
         Category category = this.categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("Category Not Found"));
 
@@ -88,6 +97,8 @@ public class CategoryService {
 
     @Transactional
     public void deleteById(UUID id){
+        Client client = getAuthenticated();
+
         Category category = this.categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("Category Not Found"));
 
