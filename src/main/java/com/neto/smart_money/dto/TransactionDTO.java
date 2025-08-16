@@ -1,6 +1,10 @@
 package com.neto.smart_money.dto;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+
 import java.math.BigDecimal;
 
-public record TransactionDTO(BigDecimal balance) {
+@Valid
+public record TransactionDTO(@NotBlank BigDecimal balance) {
 }
